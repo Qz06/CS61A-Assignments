@@ -8,7 +8,7 @@ def digit(n, k):
     >>> digit(3579, 10)
     0
     """
-    return ____
+    return (n//(10**k))%10
 
 
 def middle(a, b, c):
@@ -26,7 +26,7 @@ def middle(a, b, c):
     >>> middle(30, 5, 40)
     30
     """
-    return ____
+    return max(min(a,b),min(a,c),min(b,c))
 
 
 def falling(n, k):
@@ -42,7 +42,10 @@ def falling(n, k):
     1
     """
     "*** YOUR CODE HERE ***"
-
+    ans=1
+    for x in range(k):
+        ans*=n-x
+    return ans
 
 def divisible_by_k(n, k):
     """
@@ -65,6 +68,13 @@ def divisible_by_k(n, k):
     0
     """
     "*** YOUR CODE HERE ***"
+    count=0
+    for x in range(1,n+1):
+        if x%k==0:
+            print(x)
+            count+=1
+    return count
+        
 
 
 def sum_digits(y):
@@ -81,7 +91,11 @@ def sum_digits(y):
     6
     """
     "*** YOUR CODE HERE ***"
-
+    sum=0
+    while y:
+        sum+=y%10
+        y//=10
+    return sum
 
 def double_eights(n):
     """Return true if n has two eights in a row.
@@ -99,4 +113,12 @@ def double_eights(n):
     False
     """
     "*** YOUR CODE HERE ***"
+    while n:
+        if n%10==8 and ((n-8)//10)%10==8:
+            return True
+        n//=10
+    return False
 
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

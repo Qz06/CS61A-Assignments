@@ -14,7 +14,7 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
-
+    return lambda x:f(g(x))==g(f(x))
 
 def sum_digits(y):
     """Return the sum of the digits of non-negative integer y."""
@@ -60,6 +60,13 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    def ct(x):
+        count=0
+        for n in range(1,x+1):
+            if condition(x,n):
+                count+=1
+        return count
+    return ct
 
 
 def multiple(a, b):
@@ -71,7 +78,10 @@ def multiple(a, b):
     42
     """
     "*** YOUR CODE HERE ***"
-
+    lcm=a
+    while lcm%b:
+        lcm+=a
+    return lcm
 
 
 def cycle(f1, f2, f3):
@@ -101,4 +111,30 @@ def cycle(f1, f2, f3):
     19
     """
     "*** YOUR CODE HERE ***"
+    def mycy(n):
+        if n==0:
+            return lambda x:x
+        else:
+            ans=lambda x:x
+            flag=1
+            while n:
+                if flag%3==1:
+                    ans=lambda x,g=ans:f1(g(x))
+                elif flag%3==2:
+                    ans=lambda x,g=ans:f2(g(x))
+                else:
+                    ans=lambda x,g=ans:f3(g(x))
+                n-=1
+                flag+=1
+            return ans
+    return mycy
+#better implement:
+# funcs = [f1, f2, f3]
+# for i in range(n):
+#     ans = lambda x, g=ans, f=funcs[i % 3]: f(g(x))
 
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
