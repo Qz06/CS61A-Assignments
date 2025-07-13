@@ -33,7 +33,9 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
         return scheme_forms.SPECIAL_FORMS[first](rest, env)
     else:
         # BEGIN PROBLEM 3
-        "*** YOUR CODE HERE ***"
+        operator=scheme_eval(first,env)
+        args=rest.map(lambda x:scheme_eval(x,env))
+        return scheme_apply(operator,args,env)
         # END PROBLEM 3
 
 def scheme_apply(procedure, args, env):
@@ -45,20 +47,28 @@ def scheme_apply(procedure, args, env):
     if isinstance(procedure, BuiltinProcedure):
         # BEGIN PROBLEM 2
         "*** YOUR CODE HERE ***"
+        args_list=[]
+        while args:
+            args_list.append(args.first)
+            args=args.rest
+        if procedure.need_env:
+            args_list.append(env)
         # END PROBLEM 2
         try:
             # BEGIN PROBLEM 2
-            "*** YOUR CODE HERE ***"
+            return procedure.py_func(*args_list)
             # END PROBLEM 2
         except TypeError as err:
             raise SchemeError('incorrect number of arguments: {0}'.format(procedure))
     elif isinstance(procedure, LambdaProcedure):
         # BEGIN PROBLEM 9
-        "*** YOUR CODE HERE ***"
+        lambda_frame=procedure.env.make_child_frame(procedure.formals,args)
+        return eval_all(procedure.body,lambda_frame)
         # END PROBLEM 9
     elif isinstance(procedure, MuProcedure):
         # BEGIN PROBLEM 11
-        "*** YOUR CODE HERE ***"
+        mu_frame=env.make_child_frame(procedure.formals,args)
+        return eval_all(procedure.body,mu_frame)
         # END PROBLEM 11
     else:
         assert False, "Unexpected procedure: {}".format(procedure)
@@ -79,7 +89,13 @@ def eval_all(expressions, env):
     2
     """
     # BEGIN PROBLEM 6
-    return scheme_eval(expressions.first, env) # replace this with lines of your own code
+    if not expressions:
+        return None
+    check=expressions
+    while check:
+        ans=scheme_eval(check.first,env)
+        check=check.rest
+    return ans
     # END PROBLEM 6
 
 
